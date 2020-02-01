@@ -1,0 +1,49 @@
+.black_overlay {
+    display: block;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 1001;
+    opacity: 80%;
+}
+
+.show_content {
+    display: block;
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    height: 30%;
+    opacity: 100%;
+    background-color: #e9e2d0;
+    z-index: 1002;
+    box-shadow: 4px 4px 15px #555;
+    border-radius: 25px;
+}
+
+#login p {
+    padding: 10px;
+    margin: 5px;
+    text-align: center;
+}
+
+#login #nameinput {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px #aaa;
+}
+
+#login #confirmlogin {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 15px;
+    background-color: #d45d79;
+}
+
+#warn {
+    color: #eb325d
+}

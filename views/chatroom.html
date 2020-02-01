@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Public Chat</title>
+        <script src="/js/jquery-3.4.1.min.js"></script>
+        <script src="/js/loginbox.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    </head>
+    <body>
+        <!--chat window-->
+        <div id="window">
+            <ul id="chat"></ul>
+            <form id="typebox" action="" method="POST">
+                <input id="mesg" autocomplete="off" required />
+                <button id="sendbtn" type="submit"><b>Send</b></button>
+            </form>
+        </div>
+        <p id="onlinenum" style="color: #222; text-align: center; width: 400px; margin-top: 10px;">Now online: 0</p>
+        <!--login window-->
+        <div id="back" class="black_overlay">
+            <form id="loginform" action="">
+                <div id="login" class="show_content">
+                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <p><b>Please enter your nickname:</b></p>
+                            <input id='nameinput' value="user" size="16" required />
+                            <button id='confirmlogin' type="submit">YES</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script>
+            $(function () {
+                var username = '';
+                var socket = io(window.location.origin /*+ '?uname='+username*/);
+                $('#typebox').submit(function(e) {
+                    e.preventDefault();
+                    socket.emit('chat mesg', $('#mesg').val());
+                    $('#mesg').val('');
+                    return false;
+                });
+                $('#loginform').submit(function(e) {
+                    e.preventDefault();
+                    username = getUsername('#nameinput');
+                    if (username != '') {
+                        socket.emit('username', username);
+                    }
+                    return false;
+                });
+                socket.on('connetction', () => {
+                    showBox('#login', '#back');
+                });
+                socket.on('othermsg', (user, msg) => {
+                    $('#chat').append($('<div class=\'msgbox\'>').append($('<li class=\'other\'>').text(user + ': ' + msg)));
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+                socket.on('mymsg', (msg) => {
+                    $('#chat').append($('<div class=\'msgbox\'>').append($('<li class=\'me\'>').text(msg)));
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+                socket.on('onlinenum', (num) => {
+                    $('#onlinenum').text('Now online: ' + num);
+                });
+            });
+        </script>
+    </body>
+</html>
